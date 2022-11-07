@@ -137,3 +137,4 @@ ui-tests/playwright-report
 
 catboost_info/
 output/
+.ipynb_checkpoints
