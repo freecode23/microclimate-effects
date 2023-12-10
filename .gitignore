@@ -2,6 +2,8 @@ Data/
 *.pkl
 **/*.pkl
 
+# Mac OS
+*.icloud
 
 *.bundle.*
 lib/
