@@ -1,4 +1,13 @@
 from sklearn.model_selection import RepeatedKFold
+# models
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from xgboost import XGBRegressor
+from catboost import CatBoostRegressor
+from lightgbm import LGBMRegressor
+import lightgbm
+
+import numpy as np
+
 # Filepaths.
 BASE_PATH = "../data/microclimate_model/combined/dataset2"
 THREE_BLDGS_FILENAME = "three_buildings"
@@ -17,14 +26,6 @@ PV_ROOFTOP_TREES = "pv_rooftop_and_trees"
 PV_ROOFTOP = "pv_rooftop"
 PV_SIDEWALKS = "pv_sidewalks"
 
-HIGH_ALBEDO_WALLS_DIR_PATH = f"{SCENARIOS_DIR_PATH}/{HIGH_ALBEDO_WALLS}"
-TREES_EXTREME_DIR_PATH = f"{SCENARIOS_DIR_PATH}/{TREES_EXTREME}"
-COOL_PAVEMENT_DIR_PATH = f"{SCENARIOS_DIR_PATH}/{COOL_PAVEMENT}"
-TREES_SURROUND_DIR_PATH = f"{SCENARIOS_DIR_PATH}/{TREES_SURROUND}"
-WALL_SHADE_DIR_PATH = f"{SCENARIOS_DIR_PATH}/{WALL_SHADE}"
-PV_ROOFTOP_TREES_DIR_PATH = f"{SCENARIOS_DIR_PATH}/{PV_ROOFTOP_TREES}"
-PV_ROOFTOP_DIR_PATH = f"{SCENARIOS_DIR_PATH}/{PV_ROOFTOP}"
-PV_SIDEWALKS_DIR_PATH = f"{SCENARIOS_DIR_PATH}/{PV_SIDEWALKS}"
 
 ALL_COLUMNS = ['AirT_Mean', 'KW', 'AbsH_Mean', 'HTmmBTU',
                'ShortW_North', 'ShortW_East', 'ShortW_South', 'ShortW_West',
@@ -42,21 +43,74 @@ ALL_COLUMNS = ['AirT_Mean', 'KW', 'AbsH_Mean', 'HTmmBTU',
                'Area_North', 'Area_East', 'Area_South','Area_West', 'Area_Top', 
                ]
 
+TEST_DATE = '2023-07-07'
+
 # Declare constants for the variable names that we use often.
-CHWTON = "CHWTON/SQM"
+CHWTON_SQM = "CHWTON/SQM"
+DATE_TIME = 'Date_Time'
 BLDGNAME = "bldgname"
 ISTB4 = "bldgname_ISTB 4"
 PYSCHOLOGY = "bldgname_Psychology"
 PSYCHOLOGY_NORTH = "bldgname_Psychology North"
-DATE_TIME = 'Date_Time'
 
 # MODELS common config:
-
 # For base model
 RANDOM_STATE = 42
 N_ESTIMATORS = 100
 
-# Fo randomized search
+# For randomized search
 CV = RepeatedKFold(n_splits=10, n_repeats=3)
-# CV = 3
+CV = 3
 N_ITER = 10
+SCORING = 'r2'
+N_JOBS = -1
+
+
+# MODELS config:
+# RF
+rf_name = "rf"
+rf_base = RandomForestRegressor(n_estimators=N_ESTIMATORS, random_state=RANDOM_STATE)
+rf_param = {
+    'criterion': ['squared_error', 'absolute_error', 'poisson'],
+    'n_estimators': [int(x) for x in np.linspace(start = 50, stop = 500, num = 10)],
+    'max_features': ["sqrt", "log2", None, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+    'max_depth': [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, None],
+    'min_samples_split': [2, 5, 10],
+    'min_samples_leaf': [ 1, 2, 4],
+    'bootstrap': [True] 
+}
+
+# XGB
+xgb_name = "xgb"
+xgb_base = XGBRegressor(n_estimators = N_ESTIMATORS, verbosity = 0, random_state = RANDOM_STATE)
+xgb_param = {
+    'learning_rate' : [0.1, 0,2 ,0.3, 0.4],
+    'n_estimators':[ 100, 250, 500, 1000],
+    'min_child_weight':[1, 2, 4, 5, 8], 
+    'max_depth': [4,6,7,8],
+    'colsample_bytree' : [ 0.3, 0.4, 0.5 , 0.7, 1 ],
+    'booster': ['gbtree', 'gblinear'] }
+
+# LGBM
+lgbm_name = "lgbm"
+lgbm_base = LGBMRegressor(random_state = RANDOM_STATE)
+lgbm_param = {'learning_rate' : [0.01, 0.02, 0.03, 0.04, 0.05, 0.08, 0.1, 0.2, 0.3, 0.4],
+                'n_estimators' : [100, 200, 300, 400, 500, 600, 800, 1000, 1500, 2000],
+                'num_leaves': [20,30,40, 50, 100], 
+                'min_child_samples': [5, 10, 20, 30],  # Lowered the lower limit
+                'min_child_weight': [1e-5, 1e-3, 1e-2, 1e-1, 1, 1e1, 1e2, 1e3],
+                'subsample': [0.1, 0.3, 0.8, 1.0], 
+                'max_depth': [3, 4, 5, 6, 7, 8],  # Adjusted the range
+                'colsample_bytree': [0.4, 0.5, 0.6, 1.0],
+                'reg_alpha': [0, 1e-1, 1, 2, 5, 7, 10, 50, 100],
+                'reg_lambda': [0, 1e-1, 1, 5, 10, 20, 50, 100]}
+
+
+# CATBOOST
+cb_name = "catboost"
+cb_base = CatBoostRegressor(random_state = RANDOM_STATE, verbose=False)
+cb_param = {
+        'learning_rate' : [0.01, 0.02, 0.03, 0.04, 0.05, 0.08, 0.1, 0.2, 0.3, 0.4],
+        'n_estimators' : [100, 200, 300, 400, 500, 600, 800, 1000],
+        'depth': [4, 6, 10],
+        'l2_leaf_reg': [1, 3, 5, 7, 9]}
