@@ -8,15 +8,21 @@ import lightgbm
 
 import numpy as np
 
-# Filepaths.
-BASE_PATH = "../data/microclimate_model/combined/dataset2"
+BASE_PATH = "../data/dataset2"
+
+# Data file paths.
 THREE_BLDGS_FILENAME = "three_buildings"
 TRAIN_FILE_PATH = f"{BASE_PATH}/{THREE_BLDGS_FILENAME}_train.csv"
 TEST_FILE_PATH = f"{BASE_PATH}/{THREE_BLDGS_FILENAME}_test.csv"
-RESULT_DIR_PATH = f"{BASE_PATH}/result"
-MODEL_DIR_PATH = f"{RESULT_DIR_PATH}/model"
 SCENARIOS_DIR_PATH = f"{BASE_PATH}/scenarios"
 
+# Result paths.
+RESULT_DIR_PATH = f"{BASE_PATH}/result"
+MODEL_DIR_PATH = f"{RESULT_DIR_PATH}/models"
+SCORES_DIR_PATH = f"{RESULT_DIR_PATH}/scores"
+PLOTS_DIR_PATH = f"{RESULT_DIR_PATH}/plots"
+
+# Scenarios name.
 HIGH_ALBEDO_WALLS = "high_albedo_walls"
 TREES_EXTREME = "trees_extreme"
 COOL_PAVEMENT = "cool_pavement"
