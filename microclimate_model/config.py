@@ -20,6 +20,7 @@ SCENARIOS_DIR_PATH = f"{BASE_PATH}/scenarios"
 RESULT_DIR_PATH = f"{BASE_PATH}/result"
 MODEL_DIR_PATH = f"{RESULT_DIR_PATH}/models"
 SCORES_DIR_PATH = f"{RESULT_DIR_PATH}/scores"
+SUMMARY_FILE_NAME = "summary.csv"
 PLOTS_DIR_PATH = f"{RESULT_DIR_PATH}/plots"
 
 # Scenarios name.
@@ -31,6 +32,7 @@ WALL_SHADE = "wall_shade"
 PV_ROOFTOP_TREES = "pv_rooftop_and_trees"
 PV_ROOFTOP = "pv_rooftop"
 PV_SIDEWALKS = "pv_sidewalks"
+SCENARIOS = ['high_albedo_walls', 'cool_pavement', 'trees_surround', 'wall_shade', 'pv_sidewalks', 'pv_sidewalks_2', 'pv_rooftop_and_trees', 'trees_extreme', 'pv_rooftop']
 
 
 ALL_COLUMNS = ['AirT_Mean', 'KW', 'AbsH_Mean', 'HTmmBTU',
@@ -78,12 +80,12 @@ rf_name = "rf"
 rf_base = RandomForestRegressor(n_estimators=N_ESTIMATORS, random_state=RANDOM_STATE)
 rf_param = {
     'criterion': ['squared_error', 'absolute_error', 'poisson'],
-    'n_estimators': [int(x) for x in np.linspace(start = 50, stop = 500, num = 10)],
-    'max_features': ["sqrt", "log2", None, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
-    'max_depth': [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, None],
-    'min_samples_split': [2, 5, 10],
-    'min_samples_leaf': [ 1, 2, 4],
-    'bootstrap': [True] 
+    'n_estimators': [100, 200, 300],  # Number of trees in the random forest
+    'max_features': ['log2', 'sqrt'],  # Number of features to consider at every split
+    'max_depth': [10, 20, 30, None],   # Maximum number of levels in tree
+    'min_samples_split': [2, 5, 10],   # Minimum number of samples required to split a node
+    'min_samples_leaf': [1, 2, 4],     # Minimum number of samples required at each leaf node
+    'bootstrap': [True, False]         # Method of selecting samples for training each tree
 }
 
 # XGB
