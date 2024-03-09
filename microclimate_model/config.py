@@ -1,3 +1,4 @@
+# This is the config file for dataset2
 from sklearn.model_selection import RepeatedKFold
 # models
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
@@ -16,12 +17,25 @@ TRAIN_FILE_PATH = f"{BASE_PATH}/{THREE_BLDGS_FILENAME}_train.csv"
 TEST_FILE_PATH = f"{BASE_PATH}/{THREE_BLDGS_FILENAME}_test.csv"
 SCENARIOS_DIR_PATH = f"{BASE_PATH}/scenarios"
 
-# Result paths.
+# Result paths by dataset.
 RESULT_DIR_PATH = f"{BASE_PATH}/result"
-MODEL_DIR_PATH = f"{RESULT_DIR_PATH}/models"
-SCORES_DIR_PATH = f"{RESULT_DIR_PATH}/scores"
-SUMMARY_FILE_NAME = "summary.csv"
-PLOTS_DIR_PATH = f"{RESULT_DIR_PATH}/plots"
+
+
+# MODEL_DIR_PATH = f"{RESULT_DIR_PATH}/models"
+# SCORES_DIR_PATH = f"{RESULT_DIR_PATH}/scores"
+# PLOTS_DIR_PATH = f"{RESULT_DIR_PATH}/plots"
+# SUMMARY_FILE_PATH = f"{SCORES_DIR_PATH}/summary.csv"
+
+# Datasetnames:
+DEFAULT_5AM = "default_5am"
+DEFAULT_8AM = "default_8am"
+LONG_WAVE_5AM = "long_wave_5am"
+LONG_WAVE_8AM = "long_wave_8am"
+HEATING_8AM = "heating_8am"
+SUMWAVE_8AM = "sumwave_8am"
+
+# Bulding names
+BLDG_NAMES = ["Psychology", "Psychology_North", "Istb_4"]
 
 # Scenarios name.
 HIGH_ALBEDO_WALLS = "high_albedo_walls"
@@ -32,20 +46,18 @@ WALL_SHADE = "wall_shade"
 PV_ROOFTOP_TREES = "pv_rooftop_and_trees"
 PV_ROOFTOP = "pv_rooftop"
 PV_SIDEWALKS = "pv_sidewalks"
-SCENARIOS = ['high_albedo_walls', 'cool_pavement', 'trees_surround', 'wall_shade', 'pv_sidewalks', 'pv_sidewalks_2', 'pv_rooftop_and_trees', 'trees_extreme', 'pv_rooftop']
+SCENARIOS = ['high_albedo_walls', 'cool_pavement', 'trees_surround', 'wall_shade', 'pv_sidewalks', 'pv_sidewalks_2', 'pv_rooftop_and_trees', 'trees_extreme', 'pv_rooftop', 'rooftop_wall_shade', 'green_roof']
 
 
-ALL_COLUMNS = ['AirT_Mean', 'KW', 'AbsH_Mean', 'HTmmBTU',
-               'ShortW_North', 'ShortW_East', 'ShortW_South', 'ShortW_West',
-               'Shade_North', 'Shade_East', 'Shade_South', 'Shade_West',
+ALL_COLUMNS = ['AirT_Mean', 'KW', 'AbsH_Mean', 'HTmmBTU', 'CHWTON/SQM', 
+               'ShortW_North', 'ShortW_East', 'ShortW_South', 'ShortW_West', 'ShortW_Top', 
+               'Shade_North', 'Shade_East', 'Shade_South', 'Shade_West', 'Shade_Top', 
                'bldgname_ISTB 4', 'bldgname_Psychology North','bldgname_Psychology'
-               'CHWTON/SQM', 
                # Additional variables on top of those from first publication.`
                'KW/SQM', 'HTmmBTU/SQM', 'CHWTON',
                'AirT_North', 'AirT_East', 'AirT_South', 'AirT_West',
+               'AirT_Top',
                'RelH_Mean',   
-               'ShortW_Top', 
-               'Shade_Top', 
                'SumW_North', 'SumW_East', 'SumW_South', 'SumW_West', 'SumW_Top',
                'LongW_North', 'LongW_East', 'LongW_South', 'LongW_West', 'LongW_Top', 
                'Area_North', 'Area_East', 'Area_South','Area_West', 'Area_Top', 
@@ -67,7 +79,8 @@ RANDOM_STATE = 42
 N_ESTIMATORS = 100
 
 # For randomized search
-CV = RepeatedKFold(n_splits=10, n_repeats=3)
+# CV = RepeatedKFold(n_splits=5, n_repeats=3)
+# CV = RepeatedKFold(n_splits=10, n_repeats=3)
 CV = 3
 N_ITER = 10
 SCORING = 'r2'
