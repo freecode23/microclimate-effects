@@ -54,7 +54,7 @@ class Data(object):
         test_data = df[(df[config.DATE_TIME].dt.month == 7) & (df[config.DATE_TIME].dt.day == 7)]
         train_data = df[~((df[config.DATE_TIME].dt.month == 7) & (df[config.DATE_TIME].dt.day == 7))]
         test_data.to_csv(config.BASE_PATH + "/test_data.csv", mode='w')
-        print(df.columns)
+
         # 3. Create train and test data.
         train_data = train_data[model_cols]
         test_data = test_data[model_cols]
@@ -201,7 +201,7 @@ class Scores(object):
             model = model.best_estimator_
             
         r2_train = model.score(data.X_train, data.y_train)
-        
+        print(data.X_train.columns)
         # Test and get r2, rmse, and mbe scores.
         y_pred = model.predict(data.X_test)
         r2 = r2_score(data.y_test, y_pred)

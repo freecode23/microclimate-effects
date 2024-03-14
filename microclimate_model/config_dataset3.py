@@ -28,31 +28,38 @@ KWM = "KW/SQM"
 HTM2 = "HTmmBTU/SQM"
 AIRT_MEAN = "AirT_Mean"
 ABSH_MEAN = "AbsH_Mean"
-SHADE = ["Shade_Top", "Shade_North", "Shade_East", "Shade_South", "Shade_West"]
 
 FEATURES_MUST_KEEP = [
     CHWTON_SQM, KWM, HTM2, AIRT_MEAN, ABSH_MEAN
-] + SHADE
+]
 
 # Define the constants for features strings that are optionals:
 DATE_TIME = "Date_Time"
+AIRT = "AirT"
+AIRT_TOP = "AirT_Top"
+ABSH = "AbsH"
+ABSH_TOP = "AbsH_Top"
+AIRP = "AirP"
 HOUR = "Hour"
-SHORT_W = "ShortW"
 LONG_W = "LongW"
 PRODUCT_W = "ProductW"
-ABS_H = "AbsH"
-AIR_P = "AirP"
+SHORT_W = "ShortW"
+SHORT_W_TOP = "ShortW_Top"
 WIND = "Wind"
-AIR_T = "AirT"
+SHADE = "Shade"
 
 FEATURES_OPTIONAL = {
     HOUR: ["Hour"],
-    SHORT_W: ["ShortW_Top", "ShortW_North", "ShortW_East", "ShortW_South", "ShortW_West"],
     LONG_W: ["LongW_Top", "LongW_North", "LongW_East", "LongW_South", "LongW_West"],
+    SHADE: ["Shade_Top", "Shade_North", "Shade_East", "Shade_South", "Shade_West"],
+    SHORT_W: ["ShortW_Top", "ShortW_North", "ShortW_East", "ShortW_South", "ShortW_West"],
+    SHORT_W_TOP: ["ShortW_Top"],
     PRODUCT_W: ["ProductW_Top", "ProductW_North", "ProductW_East", "ProductW_South", "ProductW_West"],
-    ABS_H: ["AbsH_Top", "AbsH_North", "AbsH_East", "AbsH_South", "AbsH_West"],
-    AIR_T: ["AirT_Top", "AirT_North", "AirT_East", "AirT_South", "AirT_West"],
-    AIR_P: ["AirP_Top", "AirP_North", "AirP_East", "AirP_South", "AirP_West"],
+    ABSH: ["AbsH_North", "AbsH_East", "AbsH_South", "AbsH_West"],
+    ABSH_TOP: ["AbsH_Top"],
+    AIRT: ["AirT_North", "AirT_East", "AirT_South", "AirT_West",],
+    AIRT_TOP: ["AirT_Top"],
+    AIRP: ["AirP_Top", "AirP_North", "AirP_East", "AirP_South", "AirP_West"],
     WIND: ["Wind_Top", "Wind_North", "Wind_East", "Wind_South", "Wind_West", "Wind_Mean"],
 }
 
@@ -169,6 +176,10 @@ def get_features_and_title(optional_feature_names):
         final_feature_title += feature_name
         if i!= len(optional_feature_names)-1:
             final_feature_title += "_"
+
+
+    if final_feature_title == "":
+        final_feature_title = "Default"
     return final_features, final_feature_title
 
 
